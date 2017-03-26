@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import flask
 from flask import Flask, render_template
 from flask_wtf import Form
 from flask_script import Manager
@@ -11,7 +12,7 @@ from wtforms.validators import Required
 # using to define the form 
 class NameForm(Form):
 	"""docstring for NameForm"""
-	name = StringField('What is your name?', validators=[Required()])
+	name = StringField('What is your name?', validators=[Required()]) # validate
 	submit = SubmitField('Submit')
 
 # set flask-wtf
@@ -32,14 +33,15 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST']) # 'POST' is necessary
 def index():
 	name = None # set default
 	form = NameForm()
 	if form.validate_on_submit(): # user's form is fine
 		name = form.name.data
 		form.name.data = ''
-	return render_template('index.html', form=form, name=name)
+	return render_template('index.html', form=form, name=name) # redirect 
 
 if __name__ == '__main__':
 	manager.run(debug=True)	
+
